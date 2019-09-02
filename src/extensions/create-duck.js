@@ -30,11 +30,14 @@ module.exports = (toolbox) => {
         }
 
         let patched = false;
-        const imported = await pExists(duckIndex, `${name}.js`);
-        if (!createIndex && exists(duckIndex) && !imported) {
-            if (toolbox.askPatch(target)) {
-                await patch(duckIndex, { insert: `\n\nimport { reducer as ${name} } from './${name}';`, after: `import { combineReducers } from 'redux';` })
-                await patch(duckIndex, { insert: `\n\t${name},`, after: 'combineReducers({' })
+
+        const importedJS = await pExists(duckIndex, `import { reducer as ${name} } from './${name}';`);
+        const importedName = await pExists(duckIndex, `${name},`);
+
+        if (!createIndex && await exists(duckIndex) && (!importedJS || !importedName)) {
+            if (await toolbox.askPatch(target)) {
+                if (!importedJS) await patch(duckIndex, { insert: `\n\nimport { reducer as ${name} } from './${name}';`, after: `import { combineReducers } from 'redux';` });
+                if (!importedName) await patch(duckIndex, { insert: `\n\t${name},`, after: 'combineReducers({' })
                 patched = true;
             }
         }
