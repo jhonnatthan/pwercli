@@ -3,14 +3,15 @@ module.exports = (toolbox) => {
         template: { generate },
         print: { success, info },
         filesystem: { exists },
+        strings: { upperCase, lowerCase, upperFirst },
         patching: { patch, exists: pExists },
     } = toolbox;
 
     async function createSagas(name) {
-        const nameUpper = name.toUpperCase(), nameLower = name.toLowerCase(), nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
-
+        const nameUpper = upperCase(name), nameLower = lowerCase(name), nameCapitalized = upperFirst(name);
         const sagasIndex = `src/store/sagas/index.js`;
         const target = `src/store/sagas/${nameLower}.js`;
+        const apiTarget = `src/services/api.js`;
 
         const createIndex = await toolbox.verifyExistsCreate(sagasIndex)
         if (createIndex) {
@@ -42,6 +43,8 @@ module.exports = (toolbox) => {
         }
 
         if (!createIndex && (!importedJS || !importedName)) info(`Don't forget to add the reference to your sagas index.js file`)
+
+        if (!await exists(apiTarget)) if (await toolbox.askMessage('API file not found, would you like to create it?')) await toolbox.createApi();
     }
 
     toolbox.createSagas = createSagas;

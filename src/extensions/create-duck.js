@@ -3,11 +3,12 @@ module.exports = (toolbox) => {
         template: { generate },
         print: { success, info },
         filesystem: { exists },
+        strings: { upperCase, lowerCase, upperFirst },
         patching: { patch, exists: pExists },
     } = toolbox;
 
     async function createDuck(name) {
-        const nameUpper = name.toUpperCase(), nameLower = name.toLowerCase(), nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
+        const nameUpper = upperCase(name), nameLower = lowerCase(name), nameCapitalized = upperFirst(name);
         const duckIndex = `src/store/ducks/index.js`;
         const target = `src/store/ducks/${nameLower}.js`;
 
