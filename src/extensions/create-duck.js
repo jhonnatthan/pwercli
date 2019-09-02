@@ -7,15 +7,16 @@ module.exports = (toolbox) => {
     } = toolbox;
 
     async function createDuck(name) {
-        const duckIndex = `src/store/ducks/index.js`
-        const target = `src/store/ducks/${name}.js`;
+        const nameUpper = name.toUpperCase(), nameLower = name.toLowerCase();
+        const duckIndex = `src/store/ducks/index.js`;
+        const target = `src/store/ducks/${nameLower}.js`;
 
         const createIndex = await toolbox.verifyExistsCreate(duckIndex)
         if (createIndex) {
             await generate({
                 template: 'duckIndex.js.ejs',
                 target: duckIndex,
-                props: { nameUpper: name.toUpperCase(), nameLower: name.toLowerCase() }
+                props: { nameUpper, nameLower }
             });
             success(`Generated duck at src/store/ducks/index.js`);
         }
@@ -24,25 +25,22 @@ module.exports = (toolbox) => {
             await generate({
                 template: 'duck.js.ejs',
                 target,
-                props: { nameUpper: name.toUpperCase(), nameLower: name.toLowerCase() }
+                props: { nameUpper, nameLower }
             });
-            success(`Generated duck at src/store/ducks/${name}.js`);
+            success(`Generated duck at src/store/ducks/${nameLower}.js`);
         }
 
-        let patched = false;
-
-        const importedJS = await pExists(duckIndex, `import { reducer as ${name} } from './${name}';`);
-        const importedName = await pExists(duckIndex, `${name},`);
+        const importedJS = await pExists(duckIndex, `import { reducer as ${nameLower} } from './${nameLower}';`);
+        const importedName = await pExists(duckIndex, `${nameLower},`);
 
         if (!createIndex && await exists(duckIndex) && (!importedJS || !importedName)) {
             if (await toolbox.askPatch(target)) {
-                if (!importedJS) await patch(duckIndex, { insert: `\n\nimport { reducer as ${name} } from './${name}';`, after: `import { combineReducers } from 'redux';` });
-                if (!importedName) await patch(duckIndex, { insert: `\n\t${name},`, after: 'combineReducers({' })
-                patched = true;
+                if (!importedJS) await patch(duckIndex, { insert: `\n\nimport { reducer as ${nameLower} } from './${nameLower}';`, after: `import { combineReducers } from 'redux';` });
+                if (!importedName) await patch(duckIndex, { insert: `\n\t${nameLower},`, after: 'combineReducers({' })
             }
         }
 
-        if (!createIndex && !patched && !imported) info(`Don't forget to add the reference to your ducks index.js file`);
+        if (!createIndex && (!importedJS || !importedName)) info(`Don't forget to add the reference to your ducks index.js file`)
     }
 
     toolbox.createDuck = createDuck;

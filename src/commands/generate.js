@@ -7,14 +7,33 @@ let generateModule = {
         const {
             parameters,
             print: { info, error },
+            prompt: { ask },
             createDuck
         } = toolbox;
 
-        const type = parameters.first;
-        if (!type) { error('Type name must be specified'); return; }
+        let type = parameters.first;
+        let name = parameters.second;
 
-        const name = parameters.second;
-        if (!name) { error('Module name must be specified'); return; }
+        if (!type) {
+            let hasName = ['duck', 'sagas', 'component', 'page'];
+
+            const askType = {
+                type: 'list',
+                name: 'selectedType',
+                message: 'Select the type of file you want to generate.',
+                choices: [...hasName, 'api', 'storage'],
+            }
+            const questions = [askType];
+            const { selectedType } = await ask(questions)
+            type = selectedType;
+
+            if (hasName.includes(selectedType)) {
+                const askName = { type: 'input', name: 'selectedName', message: `Set your ${selectedType} name: ` }
+                const questions2 = [askName];
+                const { selectedName } = await ask(questions2);
+                name = selectedName;
+            }
+        }
 
         switch (type) {
             case 'duck':
