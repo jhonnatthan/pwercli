@@ -1,9 +1,8 @@
-const generateModule = {
+let generateModule = {
     name: 'generate',
     alias: ['g'],
-    toolbox: null,
     run: async toolbox => {
-        this.toolbox = toolbox;
+        generateModule.toolbox = toolbox;
 
         const {
             filesystem,
@@ -39,7 +38,7 @@ const generateModule = {
             print: { success, info },
             filesystem: { exists },
             patching: { patch, exists: pExists }
-        } = this.toolbox;
+        } = generateModule.toolbox;
 
         const duckIndex = `src/store/ducks/index.js`
         const target = `src/store/ducks/${name}.js`;
@@ -76,7 +75,7 @@ const generateModule = {
         if (!createIndex && !patched && !imported) info(`Don't forget to add the reference to your ducks index.js file`);
     },
     askPatch: async target => {
-        const { prompt: { ask } } = this.toolbox;
+        const { prompt: { ask } } = generateModule.toolbox;
 
         const askPatch = {
             type: 'list',
@@ -90,7 +89,7 @@ const generateModule = {
         return patch === 'yes' ? true : false
     },
     verifyExistsCreate: async target => {
-        const { filesystem: { exists }, prompt: { ask } } = this.toolbox;
+        const { filesystem: { exists }, prompt: { ask } } = generateModule.toolbox;
 
         if (!exists(target)) {
             const askCreate = {
@@ -108,7 +107,7 @@ const generateModule = {
         }
     },
     verifyExistsOverwrite: async target => {
-        const { filesystem: { exists }, prompt: { ask }, print: { error } } = this.toolbox;
+        const { filesystem: { exists }, prompt: { ask }, print: { error } } = generateModule.toolbox;
 
         if (exists(target)) {
             error(`File ${target} exists`);
