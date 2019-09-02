@@ -1,12 +1,12 @@
 module.exports = (toolbox) => {
     const { filesystem: { exists }, prompt: { ask } } = toolbox;
 
-    async function verifyExistsCreate(target) {
-        if (!exists(target)) {
+    async function verifyExistsCreate(_target, _message = null) {
+        if (!exists(_target)) {
             const askCreate = {
                 type: 'list',
                 name: 'create',
-                message: `The file ${target} does not exist, do you want to create it`,
+                message: _message ? _message : `The file ${_target} does not exist, do you want to create it`,
                 choices: ['yes', 'no'],
             }
             const questions = [askCreate];

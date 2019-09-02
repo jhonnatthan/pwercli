@@ -7,7 +7,7 @@ module.exports = (toolbox) => {
     } = toolbox;
 
     async function createDuck(name) {
-        const nameUpper = name.toUpperCase(), nameLower = name.toLowerCase();
+        const nameUpper = name.toUpperCase(), nameLower = name.toLowerCase(), nameCapitalized = name.charAt(0).toUpperCase() + name.slice(1);
         const duckIndex = `src/store/ducks/index.js`;
         const target = `src/store/ducks/${nameLower}.js`;
 
@@ -16,7 +16,7 @@ module.exports = (toolbox) => {
             await generate({
                 template: 'duckIndex.js.ejs',
                 target: duckIndex,
-                props: { nameUpper, nameLower }
+                props: { nameUpper, nameLower, nameCapitalized }
             });
             success(`Generated duck at src/store/ducks/index.js`);
         }
@@ -25,7 +25,7 @@ module.exports = (toolbox) => {
             await generate({
                 template: 'duck.js.ejs',
                 target,
-                props: { nameUpper, nameLower }
+                props: { nameUpper, nameLower, nameCapitalized }
             });
             success(`Generated duck at src/store/ducks/${nameLower}.js`);
         }

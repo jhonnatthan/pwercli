@@ -1,0 +1,12 @@
+import { all, takeLatest } from 'redux-saga/effects';
+
+import { <%= props.nameCapitalized %>Types } from '../ducks/<%= props.nameLower %>';
+import { request<%= props.nameCapitalized %> } from './<%= props.nameLower %>';
+
+export default function* rootSaga() {
+    return yield all([
+        init(),
+
+        takeLatest(<%= props.nameCapitalized %>Types.<%= props.nameUpper %>_REQUEST, request<%= props.nameCapitalized %>),
+    ]);
+}

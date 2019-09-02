@@ -1,0 +1,12 @@
+import { call, put } from 'redux-saga/effects';
+import api from '../../services/api';
+import <%= props.nameCapitalized %>Actions from '../ducks/<%= props.nameLower %>';
+
+export function* request<%= props.nameCapitalized %>({ <%= props.nameLower %>Id }) {
+    try {
+        const response = yield call(api.get, `<%= props.nameLower %>/${<%= props.nameLower %>Id}`);
+        yield put(<%= props.nameCapitalized %>Actions.<%= props.nameLower %>Success(response.data));
+    } catch (err) {
+        yield put(<%= props.nameCapitalized %>Actions.requestFailure());
+    }
+}

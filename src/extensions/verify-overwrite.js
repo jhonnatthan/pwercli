@@ -1,9 +1,9 @@
 module.exports = (toolbox) => {
     const { filesystem: { exists }, prompt: { ask }, print: { error } } = toolbox;
 
-    async function verifyExistsOverwrite(target) {
-        if (exists(target)) {
-            error(`File ${target} exists`);
+    async function verifyExistsOverwrite(_target) {
+        if (exists(_target)) {
+            error(`File ${_target} exists`);
             const askOverwrite = {
                 type: 'list',
                 name: 'overwrite',

@@ -1,22 +1,20 @@
-let generateModule = {
+module.exports = {
     name: 'generate',
     alias: ['g'],
     run: async toolbox => {
-        generateModule.toolbox = toolbox;
-
         const {
             parameters,
             print: { info, error },
             prompt: { ask },
-            createDuck
+            createDuck,
+            createSagas
         } = toolbox;
 
         let type = parameters.first;
         let name = parameters.second;
+        let hasName = ['duck', 'sagas', 'component', 'page'];
 
         if (!type) {
-            let hasName = ['duck', 'sagas', 'component', 'page'];
-
             const askType = {
                 type: 'list',
                 name: 'selectedType',
@@ -26,9 +24,11 @@ let generateModule = {
             const questions = [askType];
             const { selectedType } = await ask(questions)
             type = selectedType;
+        }
 
-            if (hasName.includes(selectedType)) {
-                const askName = { type: 'input', name: 'selectedName', message: `Set your ${selectedType} name: ` }
+        if (!name) {
+            if (hasName.includes(type)) {
+                const askName = { type: 'input', name: 'selectedName', message: `Set your ${type} name: ` }
                 const questions2 = [askName];
                 const { selectedName } = await ask(questions2);
                 name = selectedName;
@@ -38,8 +38,11 @@ let generateModule = {
         switch (type) {
             case 'duck':
                 createDuck(name);
+                if (await toolbox.verifyExistsCreate(`src/store/sagas/${name.toLowerCase()}.js`, `Do you want to create ${name} sagas?`)) createSagas(name);
                 break;
             case 'sagas':
+                createSagas(name);
+                if (await toolbox.verifyExistsCreate(`src/store/ducks/${name.toLowerCase()}.js`, `Do you want to create ${name} duck?`)) createSagas(name);
                 break;
             default:
                 error(`Please define which template you want to generate.`)
@@ -48,5 +51,3 @@ let generateModule = {
         }
     }
 }
-
-module.exports = generateModule;
