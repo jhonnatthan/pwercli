@@ -7,7 +7,9 @@ module.exports = {
             print: { info, error },
             prompt: { ask },
             createDuck,
-            createSagas
+            createSagas,
+            createApi,
+            createComponent
         } = toolbox;
 
         let type = parameters.first;
@@ -42,7 +44,19 @@ module.exports = {
             case 'sagas':
                 await createSagas(name);
                 if (await toolbox.verifyExistsCreate(`src/store/ducks/${name.toLowerCase()}.js`, `Do you want to create ${name} duck?`))
-                    await createSagas(name);
+                    await createDuck(name);
+                break;
+            case 'component':
+                await createComponent(type, name);
+                break;
+            case 'page':
+                await createComponent(type, name);
+                break;
+            case 'api':
+                await createApi();
+                break;
+            case 'storage':
+
                 break;
             default:
                 error(`Please define which template you want to generate.`)

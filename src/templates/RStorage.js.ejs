@@ -1,0 +1,39 @@
+export dafault storage = {
+    get: name => {
+        try {
+            let value = localStorage.getItem(name);
+            if (value) {
+                try {
+                    value = JSON.parse(value);
+                    return value;
+                } catch (error) {
+                    return value;
+                }
+            }
+        } catch (error) {
+            console.error('Error while retrieving data', error);
+        }
+    },
+    set: (name, data) => {
+        try {
+            let value = JSON.stringify(data);
+            return localStorage.setItem(name, value);
+        } catch (error) {
+            console.error('Error while storing data:', error);
+        }
+    },
+    getToken: () => {
+        return storage.get('@user:token');
+    },
+    setToken: token => {
+        return storage.set('@user:token', token);
+    },
+    getUser: () => {
+        return storage.get('@user:data');
+    },
+    setUser: user => {
+        return storage.set('@user:data', user);
+    }
+}
+
+export default api;

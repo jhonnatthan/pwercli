@@ -1,0 +1,46 @@
+import AsyncStorage from '@react-native-community/async-storage';
+
+export default storage = {
+    get: async name => {
+        try {
+            let value = await AsyncStorage.getItem(name);
+            if (value !== null) {
+                try {
+                    value = JSON.parse(value);
+                    return value;
+                } catch (error) {
+                    return value;
+                }
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error('Error while retrieving data', error);
+        }
+    },
+    set: async (name, data) => {
+        try {
+            let value;
+            try {
+                value = JSON.stringify(data);
+            } catch (error) {
+                value = data;
+            }
+            return await AsyncStorage.setItem(name, value);
+        } catch (error) {
+            console.error('Error while storing data:', error);
+        }
+    },
+    getToken: () => {
+        return await storage.get('@user:token');
+    },
+    setToken: token => {
+        return await storage.set('@user:token', token);
+    },
+    getUser: async () => {
+        return await storage.get('@user:data');
+    },
+    setUser: async user => {
+        return await storage.set('@user:data', user);
+    },
+}

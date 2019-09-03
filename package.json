@@ -2,7 +2,7 @@
   "name": "pwercli",
   "version": "0.0.1",
   "description": "pwercli CLI",
-  "private": true,
+  "private": false,
   "bin": {
     "pwercli": "bin/pwercli"
   },
