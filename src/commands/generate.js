@@ -9,6 +9,7 @@ module.exports = {
             createDuck,
             createSagas,
             createApi,
+            createStorage,
             createComponent
         } = toolbox;
 
@@ -56,7 +57,7 @@ module.exports = {
                 await createApi();
                 break;
             case 'storage':
-
+                await createStorage();
                 break;
             default:
                 error(`Please define which template you want to generate.`)

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { Container } from './styles';
 
-class <%= props.name %> extends Component {
+class <%= props.nameCapitalized %> extends Component {
     render() {
         return <div />;
     }
@@ -19,4 +19,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(<%= props.name %>);
+)(<%= props.nameCapitalized %>);
