@@ -38,7 +38,7 @@ module.exports = (toolbox) => {
         if (!createIndex && await exists(sagasIndex) && (!importedJS || !importedName)) {
             if (await toolbox.askPatch(target)) {
                 if (!importedJS) await patch(sagasIndex, { insert: `\n\nimport { ${nameCapitalized}Types } from '../ducks/${nameLower}';\nimport { request${nameCapitalized} } from './${nameLower}';`, after: `import { all, takeLatest } from 'redux-saga/effects';` });
-                if (!importedName) await patch(sagasIndex, { insert: `\n\n\t\ttakeLatest(${nameCapitalized}Types.${nameUpper}_REQUEST, request${nameCapitalized}),`, after: 'return yield all([' })
+                if (!importedName) await patch(sagasIndex, { insert: `\n\t\ttakeLatest(${nameCapitalized}Types.${nameUpper}_REQUEST, request${nameCapitalized}),\n`, after: 'return yield all([' })
             }
         }
 
