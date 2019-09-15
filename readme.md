@@ -15,10 +15,10 @@ This project has been created by [Six Team](https://six.team) with the propose t
 With PwerCLI the you will can create Components, Ducks, Sagas and more.
 
 ## Getting Started
-**Prerequisites**
+### Prerequisites
 To run this project in the development mode, you'll need to have Node.js installed and a package manager for Node.js (`npm` or `yarn`).
 
-**Installing**
+### Installing
 Cloning the Repository
 ```bash
 $ git clone https://github.com/jhonnatthan/pwercli
